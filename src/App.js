@@ -43,8 +43,8 @@ function App() {
     </section>
     <section className='photos'>
       <div className='photos-center'>
-      {data.map((photo, index) => {
-        return (<Photo key={index} {...photo}/>)
+      {data.map((photo) => {
+        return (<Photo key={photo.id} {...photo}/>)
       })}
       </div>
     </section>
