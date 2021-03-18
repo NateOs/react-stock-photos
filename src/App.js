@@ -17,7 +17,7 @@ function App() {
     try {
       const response = await fetch(url)
       const data = await response.json()
-      console.log(data)
+      setData(data)
       setLoading(false)
     } catch (error) {
       setLoading(false)
@@ -28,7 +28,28 @@ function App() {
   useEffect(() => {
     fetchPictures()
   }, [])
-  return <h2>stock photos starter</h2>
+
+  const handleSubmit = () => {
+
+  }
+
+  return (
+  <main>
+    <section className='search'>
+      <form className='search-form'>
+        <input type="text" placeholder='search' className='form-input'/>
+        <button type='submit' className='submit-btn' onClick={handleSubmit}><FaSearch /></button>
+      </form>
+    </section>
+    <section className='photos'>
+      <div className='photos-center'>
+      {data.map((photo, index) => {
+        return (<Photo key={index} {...photo}/>)
+      })}
+      </div>
+    </section>
+    {loading && <h2 className='loading'>Loading...</h2>}
+  </main>)
 }
 
 export default App
