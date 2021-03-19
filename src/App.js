@@ -28,14 +28,17 @@ function App() {
     try {
       const response = await fetch(url)
       const data = await response.json()
-      console.log(data)
       setData((oldData) => {
-        if (query) {
+        if (query && page === 1){
+          return data.results
+        } else if (query) {
           return [...oldData, ...data.results]
         } else {
           return [...oldData, ...data]
         }
       })
+      console.log(data)
+
       setLoading(false)
     } catch (error) {
       setLoading(false)
@@ -74,9 +77,9 @@ function App() {
     </section>
     <section className='photos'>
       <div className='photos-center'>
-      {data.map((photo, index) => {
-        return (<Photo key={index} {...photo}/>)
-      })}
+        {data.map((photo, index) => {
+          return (<Photo key={index} {...photo}/>)
+        })}
       </div>
     </section>
     {loading && <h2 className='loading'>Loading...</h2>}
