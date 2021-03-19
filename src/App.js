@@ -10,18 +10,31 @@ function App() {
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
+  const [query, setQuery] = useState('')
 
   const fetchPictures = async() => {
     setLoading(true)
    
     let urlPage =`&page=${page}`
     let url = `${mainUrl}${clientID}${urlPage}`
+    let urlQuery = `&query=${query}`
+
+    if (query) {
+      url = `${searchUrl}${clientID}${urlQuery}${urlPage}`
+    } else {
+      url = url
+    }
 
     try {
       const response = await fetch(url)
       const data = await response.json()
+      console.log(data)
       setData((oldData) => {
-        return [...oldData, ...data]
+        if (query) {
+          return [...oldData, ...data.results]
+        } else {
+          return [...oldData, ...data]
+        }
       })
       setLoading(false)
     } catch (error) {
@@ -46,22 +59,23 @@ function App() {
     return () => window.removeEventListener('scroll', event)
   }, [])
 
-  const handleSubmit = () => {
-
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    fetchPictures()
   }
 
   return (
   <main>
     <section className='search'>
       <form className='search-form'>
-        <input type="text" placeholder='search' className='form-input'/>
+        <input type="text" placeholder='search' className='form-input' value={query} onChange={(e) => setQuery(e.target.value)}/>
         <button type='submit' className='submit-btn' onClick={handleSubmit}><FaSearch /></button>
       </form>
     </section>
     <section className='photos'>
       <div className='photos-center'>
-      {data.map((photo) => {
-        return (<Photo key={photo.id} {...photo}/>)
+      {data.map((photo, index) => {
+        return (<Photo key={index} {...photo}/>)
       })}
       </div>
     </section>
