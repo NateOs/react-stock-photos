@@ -13,12 +13,16 @@ function App() {
 
   const fetchPictures = async() => {
     setLoading(true)
-    let url
-    url = `${mainUrl}${clientID}`
+   
+    let urlPage =`&page=${page}`
+    let url = `${mainUrl}${clientID}${urlPage}`
+
     try {
       const response = await fetch(url)
       const data = await response.json()
-      setData(data)
+      setData((oldData) => {
+        return [...oldData, ...data]
+      })
       setLoading(false)
     } catch (error) {
       setLoading(false)
@@ -28,14 +32,16 @@ function App() {
 
   useEffect(() => {
     fetchPictures()
-  }, [])
+  }, [page])
 
   useEffect(() => {
     const event = window.addEventListener('scroll', () => {
       if (!loading && 
         window.innerHeight + window.scrollY >= document.body.scrollHeight - 10) {
-        console.log('make a request here')
-      }
+          setPage((oldPage) => {
+            return oldPage + 1
+          })
+        }
     }) 
     return () => window.removeEventListener('scroll', event)
   }, [])
