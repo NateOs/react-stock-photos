@@ -7,6 +7,7 @@ const mainUrl = `https://api.unsplash.com/photos/`
 const searchUrl = `https://api.unsplash.com/search/photos/`
 
 function App() {
+  // setting state vars
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState([])
   const [page, setPage] = useState(1)
@@ -16,13 +17,13 @@ function App() {
     setLoading(true)
    
     let urlPage =`&page=${page}`
-    let url = `${mainUrl}${clientID}${urlPage}`
+    let url;
     let urlQuery = `&query=${query}`
-
+// fetch default setUrl if there's no search item, else return searched items
     if (query) {
       url = `${searchUrl}${clientID}${urlQuery}${urlPage}`
     } else {
-      url = url
+      url = `${mainUrl}${clientID}${urlPage}`
     }
 
     try {
